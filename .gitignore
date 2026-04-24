@@ -1,0 +1,11 @@
+.DS_Store
+build/
+*.log
+*.pid
+web/server.log
+web/server.pid
+web/zabhla-*-mobile.png
+web/zabhla-iphone-ip-fixed.png
+web/zabhla-insights-mobile.png
+web/zabhla-departments-mobile.png
+web/ZabhlaIcon.iconset/
