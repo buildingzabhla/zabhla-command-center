@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f7eee5">
+    <title>Zabhla Brand Command Center</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/assets/icon-192.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <link rel="stylesheet" href="/styles.css?v=20260425departments">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar glass">
+        <div class="brand-lockup">
+          <img class="brand-mark" src="/assets/zabhla-logo.png" alt="Zabhla logo">
+          <div>
+            <h1>Zabhla</h1>
+            <p>Command Center</p>
+          </div>
+        </div>
+        <nav id="nav" class="nav"></nav>
+        <div class="sidebar-footer">
+          <a class="site-link" href="https://zabhla.com/" target="_blank" rel="noreferrer">Open zabhla.com</a>
+          <small id="saveState">Saved locally</small>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar glass">
+          <div class="topbar-title">
+            <img class="topbar-logo" src="/assets/zabhla-logo.png" alt="">
+            <div>
+              <p class="eyebrow">Zabhla live workspace</p>
+              <h2 id="pageTitle">Dashboard</h2>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <button class="icon-btn" id="refreshNews" title="Refresh news">Refresh</button>
+            <button class="icon-btn" id="exportData" title="Export data">Export</button>
+          </div>
+        </header>
+
+        <section id="view" class="view"></section>
+      </main>
+
+      <nav id="mobileNav" class="mobile-nav glass"></nav>
+    </div>
+
+    <template id="dashboardTemplate">
+      <section class="hero glass">
+        <div>
+          <p class="eyebrow">Focused catalog</p>
+          <h3>Oversized unisex tees, women's denim capri, and two men's embroidered denim pants.</h3>
+          <p>Zabhla tracks marketing, social content, inventory, zabhla.com work, industry news, and next actions from one screen.</p>
+          <div class="chips">
+            <span>zabhla.com</span>
+            <span>India-first news</span>
+            <span>Shopify-ready inventory</span>
+          </div>
+        </div>
+        <div class="hero-card">
+          <span>Today</span>
+          <strong id="todaySuggestion"></strong>
+        </div>
+      </section>
+
+      <section class="metrics">
+        <article class="metric glass"><span>Marketing</span><strong id="metricMarketing"></strong><small>active tasks</small></article>
+        <article class="metric glass"><span>Social</span><strong id="metricSocial"></strong><small>planned posts</small></article>
+        <article class="metric glass"><span>Inventory</span><strong id="metricInventory"></strong><small>low stock</small></article>
+        <article class="metric glass"><span>Website</span><strong id="metricWebsite"></strong><small>open tasks</small></article>
+      </section>
+
+      <section class="grid-two">
+        <div class="panel glass">
+          <h3>Next Actions</h3>
+          <div id="dashboardSuggestions" class="stack"></div>
+        </div>
+        <div class="panel glass">
+          <h3>Industry Signals</h3>
+          <div id="dashboardNews" class="stack"></div>
+        </div>
+      </section>
+    </template>
+
+    <script src="/app.js?v=20260425departments"></script>
+  </body>
+</html>
