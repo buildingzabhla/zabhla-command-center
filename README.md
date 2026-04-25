@@ -3,7 +3,7 @@
 Native macOS desktop MVP and responsive web app for tracking Zabhla brand operations:
 
 - Official website: <https://zabhla.com/>
-- Product focus: oversized unisex tees, women's denim capri, and two men's embroidered denim pants
+- Product focus: oversized unisex tees, women's denim capri, and men's embroidered denim pants
 - Marketing campaigns and tasks
 - Social media content calendar
 - Shopify-style inventory control
