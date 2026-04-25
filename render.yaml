@@ -1,9 +1,11 @@
 services:
   - type: web
-    name: zabhla-command-center
+    name: zabhla-os
     runtime: node
-    plan: free
-    buildCommand: npm install
-    startCommand: npm start
-    healthCheckPath: /
-    autoDeploy: true
+    buildCommand: "cd frontend && npm install && npm run build && cd ../backend && npm install"
+    startCommand: "node backend/server.js"
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: NODE_ENV
+        value: production
