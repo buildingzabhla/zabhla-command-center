@@ -1,0 +1,12 @@
+{
+  "name": "zabhla-command-center",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zabhla brand command center web app and macOS app.",
+  "scripts": {
+    "start": "node web/server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
