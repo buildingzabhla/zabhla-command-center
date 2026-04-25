@@ -37,7 +37,6 @@ const seed = {
     { id: 3, caption: "Limited restock on Chaos Tee - Bone White. DM before it is gone.", platform: "WhatsApp", type: "Broadcast", status: "draft", date: "Apr 30" }
   ]
 };
-
 const fallbackNews = [
   { title: "Indian D2C fashion brands sharpen community-led drops", summary: "Streetwear labels are using Instagram and WhatsApp launches to create urgency without heavy paid ads. Zabhla can use limited drops and creator proof before scaling inventory.", source: "Zabhla OS", category: "D2C" },
   { title: "Denim and relaxed fits stay strong with urban Indian shoppers", summary: "Comfort-led bottoms and oversized silhouettes continue to perform with young buyers. Test denim washes through polls before restocking deeply.", source: "Zabhla OS", category: "Market" },
@@ -45,7 +44,6 @@ const fallbackNews = [
   { title: "WhatsApp remains a high-intent fashion sales channel", summary: "Owned subscriber lists are outperforming broad social reach for launch-day conversion. Zabhla's open rate makes WhatsApp the best 48-hour pre-drop channel.", source: "Zabhla OS", category: "Technology" },
   { title: "Streetwear brands move toward smaller monthly capsules", summary: "Focused monthly capsules reduce inventory risk and keep content fresh. Zabhla should avoid new categories until tees, capri and denim pants prove repeat demand.", source: "Zabhla OS", category: "Streetwear" }
 ];
-
 const fallbackPlaybook = { playbook: [
   { title: "Own the WhatsApp Drop Room", description: "Segment buyers, warm leads and VIPs, then launch every capsule on WhatsApp 48 hours before Instagram.", priority: "High", investment: "₹15k", timeframe: "2 weeks", impact: "150 launch orders possible from one tuned broadcast", category: "Growth" },
   { title: "Keep the Catalog Ruthlessly Tight", description: "Stay focused on oversized tees, women's denim capri and two men's embroidered denim pants until sell-through proves the next category.", priority: "High", investment: "₹0", timeframe: "Immediate", impact: "Lower dead stock and clearer brand memory", category: "Product" },
@@ -61,9 +59,22 @@ const fallbackPlaybook = { playbook: [
 function status(item) { const stock = Number(item.stock || 0); const reorder = Number(item.reorder || 0); return stock <= 0 ? "out" : stock <= reorder ? "low" : "good"; }
 function now() { return new Date().toISOString(); }
 function withMeta(rows) { return rows.map((row) => ({ created_at: now(), ...row })); }
-function initDB() { fs.mkdirSync(dataDir, { recursive: true }); if (!fs.existsSync(dataPath)) writeDB({ inventory: withMeta(seed.inventory).map((x) => ({ ...x, status: status(x) })), tasks: withMeta(seed.tasks), campaigns: withMeta(seed.campaigns), posts: withMeta(seed.posts) }); }
-function readDB() { initDB(); return JSON.parse(fs.readFileSync(dataPath, "utf8")); }
+function seeded() { return { inventory: withMeta(seed.inventory).map((x) => ({ ...x, status: status(x) })), tasks: withMeta(seed.tasks), campaigns: withMeta(seed.campaigns), posts: withMeta(seed.posts) }; }
 function writeDB(db) { fs.writeFileSync(dataPath, JSON.stringify(db, null, 2)); return db; }
+function initDB() {
+  fs.mkdirSync(dataDir, { recursive: true });
+  let db = {};
+  if (fs.existsSync(dataPath)) {
+    try { db = JSON.parse(fs.readFileSync(dataPath, "utf8")); } catch { db = {}; }
+  }
+  const initial = seeded();
+  for (const key of ["inventory", "tasks", "campaigns", "posts"]) {
+    if (!Array.isArray(db[key]) || db[key].length === 0) db[key] = initial[key];
+  }
+  db.inventory = db.inventory.map((item) => ({ ...item, status: status(item) }));
+  writeDB(db);
+}
+function readDB() { initDB(); return JSON.parse(fs.readFileSync(dataPath, "utf8")); }
 function nextId(rows) { return rows.reduce((max, row) => Math.max(max, Number(row.id) || 0), 0) + 1; }
 function nextSku(rows) { const next = rows.reduce((max, row) => { const m = String(row.id || "").match(/^ZB-(\d+)$/); return m ? Math.max(max, Number(m[1])) : max; }, 0) + 1; return `ZB-${String(next).padStart(3, "0")}`; }
 function norm(collection, item, rows = []) { if (collection === "inventory") { const next = { id: item.id || nextSku(rows), name: item.name || "New SKU", cat: item.cat || "Tees", variant: item.variant || "", stock: Number(item.stock || 0), sold: Number(item.sold || 0), price: Number(item.price || 0), reorder: Number(item.reorder || 10), ...item }; next.stock = Number(next.stock || 0); next.sold = Number(next.sold || 0); next.price = Number(next.price || 0); next.reorder = Number(next.reorder || 0); next.status = status(next); return next; } if (collection === "tasks") return { text: item.text || "", cat: item.cat || "Other", priority: item.priority || "medium", done: Boolean(item.done), ...item }; if (collection === "campaigns") return { name: item.name || "", platform: item.platform || "Instagram", status: item.status || "planned", reach: item.reach || "-", eng: item.eng || "-", date: item.date || "", ...item }; return { caption: item.caption || "", platform: item.platform || "Instagram", type: item.type || "Reel", status: item.status || "draft", date: item.date || "", ...item }; }
